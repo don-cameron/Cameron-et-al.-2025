@@ -1,13 +1,24 @@
+## For this analysis, I first used FIJI to 
+##  1) split each composite image into multiple 8-bit tiff
+##  2) set an ROI around the cell of interest 
+##  3) turned all pixels outside the ROI to 0 by
+##   a) creating a second ROI using "select all"
+##   b) Using XOR on the two ROI to create a third ROI of the area outside the chosen cell
+##   c) uses "Cut" to remove all signal from outside cell (I'm sure there is a smarter way to do this)
+##  4) Save the image as a "Text image" .csv file
+## This means that the inputs for this analysis are two csv files with a matrix of numeral values corresponding to the pixels of
+## the cell, with all pixels outside the cell set to 0.
+
 library(dplyr)
 library(ggplot2)
 library(MASS)
 library(viridis)
 
-setwd("/Volumes/Don SD/KI server/Imaging/20230125+26_STED_Mycdeg/Colocalization/FIB-NPM final")
+setwd("/path/to/your/working/directory")
 
 # ---- 1) Load & prep ----
-dfA <- read.csv("Top2a-crop.csv", header = FALSE)
-dfB <- read.csv("DAPI-crop.csv",   header = FALSE)
+dfA <- read.csv("Image1.csv", header = FALSE)
+dfB <- read.csv("Image2.csv",   header = FALSE)
 stopifnot(all(dim(dfA) == dim(dfB)))
 
 matA <- as.matrix(dfA); mode(matA) <- "numeric"
@@ -38,7 +49,7 @@ kdf <- with(kde,
               mutate(density = as.vector(z))
 )
 
-# ---- 3) Plot: inferno‐coloured points + log‐spaced KDE contours + black axes ----
+# ---- 3) Plot: coloured points + log‐spaced KDE contours + black axes ----
 p <- ggplot() +
   # points coloured by count
   geom_point(
@@ -101,9 +112,9 @@ p <- ggplot() +
     axis.ticks.y       = element_line(color = "black")
   )
 
-# ---- 4) Export as PDF for Illustrator (built-in device) ----
+# ---- 4) Export as PDF  ----
 pdf(
-  file   = "Top2a-DAPI_intensity_correlation.pdf",
+  file   = "Intensity_correlation.pdf",
   width  = 6,    # inches
   height = 6     # inches
 )
