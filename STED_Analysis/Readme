@@ -4,3 +4,5 @@ How to run:
 - Use the Extract_LIF.m program to split the lif file into individual tif files separating by image field and channel.
 - Use MultiImageSpotDetection.m (with the function identifyROI.m) to detect the ROI and save their coordinates
 - Use Spot_analysis_visualization.m (with the function CalculateROI.m) to create images of the averaged signal of the desired channel at the ROI and calculate the enrichment of signal from the channel at the central point of the ROI
+
+Used in Fig. 1c, 2i,j, and Extended Data Fig. 1b, 3a of Biorxiv manuscript
